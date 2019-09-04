@@ -13,12 +13,18 @@ def check_results():
     soup = BeautifulSoup(page.content, 'html.parser')
 
     faseGrupos = ''
-    for val in soup.findAll(attrs={"zztable stats"}):
-        faseGrupos += val.get_text() + " "
+    grupos = soup.find(id="edition_table")
+    for grupo in grupos.findAll(attrs={"column_300"}):
+        faseGrupos += grupo.a.get_text() + " "
+        faseGrupos += grupo.a["href"] + "  "
 
     faseFinal = ''
-    for val in soup.findAll(attrs={"arvore_cxjogo_new"}):
-        faseFinal += val.get_text() + " "
+    for jogo in soup.findAll(attrs={"arvore_cxjogo_new"}):
+        resultado=''
+        for equipe in jogo.findAll(attrs={"arvore_cxjogo_equipa"}):
+            resultado += equipe.find(attrs={"text"}).get_text() + " "
+            resultado += equipe.find(attrs={"arvore_cxjogo_equipa_res"}).get_text() + "  "
+        faseFinal += resultado + "    "
 
     print ("Fase de Grupos: " + faseGrupos + " ")
     print ("")
